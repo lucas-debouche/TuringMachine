@@ -1,4 +1,3 @@
-// Classe Machine
 package jeu;
 
 import java.util.ArrayList;
@@ -11,28 +10,12 @@ class Machine {
         this.verifyers = new ArrayList<>();
     }
 
-    public void initialiserPartie() {
-        System.out.println("Machine initialisée avec des critères.");
-    }
-
-    public boolean analyserProposition(Proposition proposition) {
-        for (Verif verifier : verifyers) {
-            if (!verifier.validerProposition(proposition)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void genererReponse() {
-        System.out.println("Machine génère une réponse.");
+    public void ajouterVerifier(Verif verifier) {
+        verifyers.add(verifier);
     }
 
     public List<Verif> getVerifyers() {
         return verifyers;
     }
 
-    public void ajouterVerifier(Verif verifier) {
-        verifyers.add(verifier);
-    }
 }

@@ -1,4 +1,3 @@
-// Classe Verif
 package jeu;
 
 class Verif {
@@ -8,12 +7,10 @@ class Verif {
         this.critere = critere;
     }
 
-    public boolean validerProposition(Proposition proposition) {
-        for (int valeur : proposition.getValeurs()) {
-            if (!critere.verifierCondition(valeur)) {
-                return false;
-            }
-        }
-        return true;
+
+    public Critere getCritere() {
+        return critere;
     }
+
+
 }
