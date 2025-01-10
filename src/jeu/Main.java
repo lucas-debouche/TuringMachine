@@ -10,13 +10,12 @@ import java.util.Random;
 
 public class Main {
 
-    private Machine machine;
-    private Partie partie;
+    private final Machine machine;
     private Scenario scenario;
 
     public Main() {
         machine = new Machine();
-        partie = new Partie();  // Créer une instance de Partie
+        Partie partie = new Partie();  // Créer une instance de Partie
         JFrame frame = new JFrame("Machine Turing");
 
         // Maximiser la fenêtre pour l'afficher en plein écran
@@ -43,9 +42,6 @@ public class Main {
         welcomePanel.add(title);
         welcomePanel.add(Box.createRigidArea(new Dimension(0, 100)));
         welcomePanel.add(subtitle);
-
-        // Sélectionner un scénario au hasard parmi les 3, et passer le nombre de critères
-        scenario = getScenarioAleatoire(6); // Valeur par défaut (6 critères)
 
         // Ajouter des boutons radio pour sélectionner le nombre de vérificateurs
         ButtonGroup verifierGroup = new ButtonGroup();
@@ -97,33 +93,27 @@ public class Main {
 
                 if (verifier4.isSelected()) {
                     verifierCount = 4;
-                } else if (verifier5.isSelected()) {
-                    verifierCount = 5;
                 } else if (verifier6.isSelected()) {
                     verifierCount = 6;
                 }
 
+                // Sélectionner un scénario au hasard parmi les 3, et passer le nombre de vérificateurs
+                scenario = getScenarioAleatoire(verifierCount);
 
-                if (verifierCount >= 4 && verifierCount <= 6) {
-                    // Créer les vérificateurs
+                // Créer les vérificateurs
+                for (int i = 0; i < verifierCount; i++) {
                     List<Critere> criteres = new ArrayList<>();
-                    for (int i = 0; i < verifierCount; i++) {
-                        Critere critere = scenario.getCritere(i);
-                        if (critere != null) {
-                            criteres.add(critere);
-                        }
-                    }
+                    // Générer 3 critères pour chaque vérificateur
+                    criteres.add(new Critere("🏠 < 4"));
+                    criteres.add(new Critere("🏠 > 4"));
+                    criteres.add(new Critere("🏠 = 4"));
 
-                    // Ajouter ces critères à la machine
-                    for (Critere critere : criteres) {
-                        Verif verifier = new Verif(critere);
-                        machine.ajouterVerifier(verifier);
-                    }
-
-                    // Lancer la partie automatiquement
-                    startGame(frame);
+                    Verif verifier = new Verif(criteres);
+                    machine.ajouterVerifier(verifier);
                 }
 
+                // Lancer la partie automatiquement
+                startGame(frame);
             }
         });
 
@@ -155,47 +145,57 @@ public class Main {
         int scenarioIndex = random.nextInt(3); // Sélection aléatoire entre 0, 1, 2
 
         // 3 scénarios possibles
-        switch (scenarioIndex) {
-            case 0:
-                return new Scenario(315, nombreDeCritere);
-            case 1:
-                return new Scenario(411, nombreDeCritere);
-            case 2:
-                return new Scenario(522, nombreDeCritere);
-            default:
-                return null;
-        }
+        return switch (scenarioIndex) {
+            case 0 -> new Scenario(315, nombreDeCritere);
+            case 1 -> new Scenario(411, nombreDeCritere);
+            case 2 -> new Scenario(522, nombreDeCritere);
+            default -> null;
+        };
     }
 
     private void startGame(JFrame frame) {
         // Supprimer l'écran d'introduction
         frame.getContentPane().removeAll();
 
-        // Zone pour afficher les critères
-        JPanel criteriaPanel = new JPanel();
-        criteriaPanel.setLayout(new BoxLayout(criteriaPanel, BoxLayout.Y_AXIS));
-        JLabel titleCritere = new JLabel("Critère: ");
-        titleCritere.setBackground(new Color(240, 240, 240));
-        titleCritere.setFont(new Font("Roboto", Font.BOLD, 16));
-        criteriaPanel.add(Box.createRigidArea(new Dimension(0, 50)));
-        criteriaPanel.add(titleCritere);
-        criteriaPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+        // Zone pour afficher les vérificateurs
+        JPanel verifierPanel = new JPanel();
+        verifierPanel.setLayout(new BoxLayout(verifierPanel, BoxLayout.Y_AXIS));
+
+        JLabel titleVerifier = new JLabel("Vérificateurs: ");
+        titleVerifier.setFont(new Font("Roboto", Font.BOLD, 16));
+        verifierPanel.add(titleVerifier);
+        verifierPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         for (Verif verifier : machine.getVerifyers()) {
-            JTextArea criteriaArea = new JTextArea("- " +verifier.getCritere().getDescription());
-            criteriaArea.setEditable(false);
-            criteriaArea.setBackground(new Color(240, 240, 240));
-            criteriaArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            criteriaArea.setFont(new Font("Roboto", Font.PLAIN, 14));
-            criteriaArea.setLineWrap(true);
-            criteriaArea.setWrapStyleWord(true);
-            criteriaPanel.add(criteriaArea);
+            JPanel verifierBox = new JPanel();
+            verifierBox.setLayout(new BorderLayout());
+
+            // Partie supérieure du vérificateur
+            JPanel topPanel = new JPanel();
+            topPanel.setBackground(new Color(200, 200, 200)); // Couleur de fond
+            topPanel.add(new JLabel("Vérificateur " + (machine.getVerifyers().indexOf(verifier) + 1)));
+            verifierBox.add(topPanel, BorderLayout.NORTH);
+
+            // Partie inférieure du vérificateur
+            JPanel bottomPanel = new JPanel();
+            bottomPanel.setLayout(new GridLayout(1, 3)); // 3 critères
+
+            for (Critere critere : verifier.getCriteres()) {
+                JPanel criterePanel = new JPanel();
+                criterePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Bordure autour de chaque critère
+                criterePanel.add(new JLabel(critere.getDescription()));
+                bottomPanel.add(criterePanel);
+            }
+
+            verifierBox.add(bottomPanel, BorderLayout.CENTER);
+            verifierPanel.add(verifierBox);
+            verifierPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Espacement entre les vérificateurs
         }
 
-        // Affichage des critères sur le côté gauche
-        JScrollPane criteriaScroll = new JScrollPane(criteriaPanel);
-        criteriaScroll.setPreferredSize(new Dimension(300, 600)); // Augmenter la largeur de la zone des critères
-        frame.add(criteriaScroll, BorderLayout.WEST);
+        // Affichage des vérificateurs sur le côté gauche
+        JScrollPane verifierScroll = new JScrollPane(verifierPanel);
+        verifierScroll.setPreferredSize(new Dimension(300, 600)); // Largeur de la zone des vérificateurs
+        frame.add(verifierScroll, BorderLayout.WEST);
 
         // Zone pour saisir le code (pavé numérique avec symboles)
         JPanel inputPanel = new JPanel();
@@ -223,7 +223,7 @@ public class Main {
                 currentPanel = trianglePanel;
             } else if (i == 1) {
                 currentPanel = squarePanel;
-            } else if (i == 2) {
+            } else {
                 currentPanel = circlePanel;
             }
 
@@ -289,19 +289,34 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Collecte du code et validation
-                String code = "";
+                StringBuilder code = new StringBuilder();
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 6; j++) {
                         if (buttons[i][j].getBackground().equals(selectedColor)) {
-                            code += buttonLabels[j];
+                            code.append(buttonLabels[j]);
                             break;
                         }
                     }
                 }
-                //On le transforme en int
-                int codeInt = Integer.parseInt(code);
-                // Vérification du code
-                if (codeInt == scenario.getNumeroSalle()) {
+
+                // On le transforme en int
+                int codeInt = Integer.parseInt(code.toString());
+                boolean valid = false;
+
+                for (Verif verifier : machine.getVerifyers()) {
+                    for (Critere critere : verifier.getCriteres()) {
+                        if (critere.getDescription().equals("numéro d'étage = " + codeInt)) {
+                            valid = true;
+                            // Surlignage en vert
+                            // Ajoutez ici la logique pour surligner ce critère en vert
+                        } else {
+                            // Surlignage en rouge
+                            // Ajoutez ici la logique pour surligner ce critère en rouge
+                        }
+                    }
+                }
+
+                if (valid) {
                     showAlert("Bravo !", "Vous avez trouvé le code !");
                     frame.dispose();
                     new Main();
@@ -309,7 +324,6 @@ public class Main {
                     showAlert("Dommage...", "Ce n'est pas le bon code. Réessayez !");
                 }
             }
-
         });
 
         frame.setVisible(true);

@@ -1,16 +1,17 @@
 package jeu;
 
+import java.util.List;
+
 class Verif {
-    private Critere critere;
+    private List<Critere> criteres; // Liste de critères
+    private int id = 0;
 
-    public Verif(Critere critere) {
-        this.critere = critere;
+    public Verif(List<Critere> criteres) {
+        this.criteres = criteres;
+        this.id ++;
     }
 
-
-    public Critere getCritere() {
-        return critere;
+    public List<Critere> getCriteres() {
+        return criteres;
     }
-
-
 }
