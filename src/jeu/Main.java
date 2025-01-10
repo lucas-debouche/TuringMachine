@@ -17,53 +17,77 @@ public class Main {
     public Main() {
         machine = new Machine();
         partie = new Partie();  // Créer une instance de Partie
-        JFrame frame = new JFrame("Jeu de Proposition - Swing");
+        JFrame frame = new JFrame("Machine Turing");
 
         // Maximiser la fenêtre pour l'afficher en plein écran
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  // Plein écran
-        frame.setUndecorated(true);  // Retirer les bordures et la barre de titre
         frame.setLayout(new BorderLayout());
+
+        // Ecran d'accueil
+        JPanel welcomePanel = new JPanel();
+        welcomePanel.setLayout(new BoxLayout(welcomePanel, BoxLayout.Y_AXIS));
+        welcomePanel.setBackground(new Color(83, 83, 83));
+
+        JLabel title = new JLabel("Bienvenue dans le Turing Challenge");
+        title.setFont(new Font("Roboto", Font.BOLD, 36));
+        title.setForeground(Color.WHITE);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel subtitle = new JLabel("Choisissez le nombre de vérificateurs pour commencer");
+        subtitle.setFont(new Font("Roboto", Font.PLAIN, 18));
+        subtitle.setForeground(Color.WHITE);
+        subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        welcomePanel.add(Box.createRigidArea(new Dimension(0, 100)));
+        welcomePanel.add(title);
+        welcomePanel.add(Box.createRigidArea(new Dimension(0, 100)));
+        welcomePanel.add(subtitle);
 
         // Sélectionner un scénario au hasard parmi les 3, et passer le nombre de critères
         scenario = getScenarioAleatoire(6); // Valeur par défaut (6 critères)
 
-        // Zone de sélection des vérificateurs
-        JPanel initialPanel = new JPanel();
-        initialPanel.setLayout(new BoxLayout(initialPanel, BoxLayout.Y_AXIS));
-
         // Ajouter des boutons radio pour sélectionner le nombre de vérificateurs
-        JPanel verifierCountPanel = new JPanel();
         ButtonGroup verifierGroup = new ButtonGroup();
 
         JRadioButton verifier4 = new JRadioButton("4 Vérificateurs");
+        verifier4.setFont(new Font("Roboto", Font.PLAIN, 16));
+        verifier4.setForeground(Color.WHITE);
+        verifier4.setBackground(new Color(83, 83, 83));
+        verifier4.setAlignmentX(Component.CENTER_ALIGNMENT);
         JRadioButton verifier5 = new JRadioButton("5 Vérificateurs");
+        verifier5.setFont(new Font("Roboto", Font.PLAIN, 16));
+        verifier5.setForeground(Color.WHITE);
+        verifier5.setBackground(new Color(83, 83, 83));
+        verifier5.setAlignmentX(Component.CENTER_ALIGNMENT);
         JRadioButton verifier6 = new JRadioButton("6 Vérificateurs");
+        verifier6.setFont(new Font("Roboto", Font.PLAIN, 16));
+        verifier6.setForeground(Color.WHITE);
+        verifier6.setBackground(new Color(83, 83, 83));
+        verifier6.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         verifierGroup.add(verifier4);
         verifierGroup.add(verifier5);
         verifierGroup.add(verifier6);
 
-        verifierCountPanel.add(verifier4);
-        verifierCountPanel.add(verifier5);
-        verifierCountPanel.add(verifier6);
-
         // Définir un nombre de vérificateurs par défaut
         verifier5.setSelected(true);
 
-        initialPanel.add(new JLabel("Nombre de vérificateurs :"));
-        initialPanel.add(verifierCountPanel);
+        welcomePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        welcomePanel.add(verifier4);
+        welcomePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        welcomePanel.add(verifier5);
+        welcomePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        welcomePanel.add(verifier6);
 
-        // Bouton pour démarrer la partie avec un style agréable
+
+        // Bouton pour démarrer la partie
         JButton startButton = new JButton("Démarrer la partie");
-        startButton.setFont(new Font("Arial", Font.BOLD, 16));
-        startButton.setBackground(new Color(50, 205, 50)); // Vert
-        startButton.setForeground(Color.WHITE);
-        startButton.setBorderPainted(false);
-        startButton.setFocusPainted(false);
-        startButton.setPreferredSize(new Dimension(200, 50));
+        styleButton(startButton);
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        initialPanel.add(startButton);
+
+        welcomePanel.add(Box.createRigidArea(new Dimension(0, 200)));
+        welcomePanel.add(startButton);
 
         // Événement de démarrage
         startButton.addActionListener(new ActionListener() {
@@ -79,37 +103,51 @@ public class Main {
                     verifierCount = 6;
                 }
 
-                try {
-                    if (verifierCount >= 4 && verifierCount <= 6) {
-                        // Créer les vérificateurs
-                        List<Critere> criteres = new ArrayList<>();
-                        for (int i = 0; i < verifierCount; i++) {
-                            Critere critere = scenario.getCritere(i);
-                            if (critere != null) {
-                                criteres.add(critere);
-                            }
-                        }
 
-                        // Ajouter ces critères à la machine
-                        for (Critere critere : criteres) {
-                            Verif verifier = new Verif(critere);
-                            machine.ajouterVerifier(verifier);
+                if (verifierCount >= 4 && verifierCount <= 6) {
+                    // Créer les vérificateurs
+                    List<Critere> criteres = new ArrayList<>();
+                    for (int i = 0; i < verifierCount; i++) {
+                        Critere critere = scenario.getCritere(i);
+                        if (critere != null) {
+                            criteres.add(critere);
                         }
-
-                        // Lancer la partie automatiquement
-                        showAlert("Info", "La partie a commencé !");
-                        startGame(frame);
-                    } else {
-                        showAlert("Erreur", "Nombre de vérificateurs incorrect.");
                     }
-                } catch (NumberFormatException ex) {
-                    showAlert("Erreur", "Veuillez entrer un nombre valide pour les vérificateurs.");
+
+                    // Ajouter ces critères à la machine
+                    for (Critere critere : criteres) {
+                        Verif verifier = new Verif(critere);
+                        machine.ajouterVerifier(verifier);
+                    }
+
+                    // Lancer la partie automatiquement
+                    startGame(frame);
                 }
+
             }
         });
 
-        frame.add(initialPanel, BorderLayout.CENTER);
+        frame.add(welcomePanel, BorderLayout.CENTER);
         frame.setVisible(true);
+    }
+
+    private void styleButton(JButton button) {
+        button.setFont(new Font("Roboto", Font.BOLD, 20));
+        button.setBackground(new Color(50, 205, 50));
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createLineBorder(new Color(50, 205, 50), 20, true));
+        button.setOpaque(false);
+        button.setBorderPainted(false);
+        button.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(button.getBackground());
+                g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 50, 50);
+                super.paint(g, c);
+            }
+        });
     }
 
     private Scenario getScenarioAleatoire(int nombreDeCritere) {
@@ -136,11 +174,21 @@ public class Main {
         // Zone pour afficher les critères
         JPanel criteriaPanel = new JPanel();
         criteriaPanel.setLayout(new BoxLayout(criteriaPanel, BoxLayout.Y_AXIS));
+        JLabel titleCritere = new JLabel("Critère: ");
+        titleCritere.setBackground(new Color(240, 240, 240));
+        titleCritere.setFont(new Font("Roboto", Font.BOLD, 16));
+        criteriaPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+        criteriaPanel.add(titleCritere);
+        criteriaPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+
         for (Verif verifier : machine.getVerifyers()) {
-            JTextArea criteriaArea = new JTextArea("Critère: " + verifier.getCritere().getDescription());
+            JTextArea criteriaArea = new JTextArea("- " +verifier.getCritere().getDescription());
             criteriaArea.setEditable(false);
             criteriaArea.setBackground(new Color(240, 240, 240));
             criteriaArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            criteriaArea.setFont(new Font("Roboto", Font.PLAIN, 14));
+            criteriaArea.setLineWrap(true);
+            criteriaArea.setWrapStyleWord(true);
             criteriaPanel.add(criteriaArea);
         }
 
@@ -183,7 +231,7 @@ public class Main {
 
             for (int j = 0; j < 6; j++) {
                 buttons[i][j] = new JButton(buttonLabels[j]);
-                buttons[i][j].setFont(new Font("Arial", Font.PLAIN, 20));
+                buttons[i][j].setFont(new Font("Roboto", Font.PLAIN, 20));
                 buttons[i][j].setPreferredSize(new Dimension(60, 60));
                 buttons[i][j].setBackground(new Color(240, 240, 240));
                 buttons[i][j].setFocusPainted(false);
@@ -226,14 +274,15 @@ public class Main {
         frame.add(inputPanel, BorderLayout.CENTER);
 
         // Affichage du bouton de vérification
+        JPanel verifyPanel = new JPanel();
+        verifyPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        verifyPanel.setBorder(null);  // Supprimer la bordure du panneau
         JButton verifyButton = new JButton("Vérifier");
-        verifyButton.setFont(new Font("Arial", Font.BOLD, 16));
-        verifyButton.setBackground(new Color(50, 205, 50)); // Vert
-        verifyButton.setForeground(Color.WHITE);
-        verifyButton.setPreferredSize(new Dimension(200, 50));
-        verifyButton.setBorderPainted(false);
-        verifyButton.setFocusPainted(false);
-        frame.add(verifyButton, BorderLayout.SOUTH);
+        styleButton(verifyButton);
+        verifyButton.setPreferredSize(new Dimension(500, 50));
+        verifyPanel.add(verifyButton);
+
+        frame.add(verifyPanel, BorderLayout.SOUTH);
 
         // Lorsque le joueur fait une proposition, vérifier la réponse
         verifyButton.addActionListener(new ActionListener() {

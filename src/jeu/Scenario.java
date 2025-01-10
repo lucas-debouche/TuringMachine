@@ -18,41 +18,38 @@ public class Scenario {
 
         if (numeroSalle == 315) {
             allCriteres.add("Le numéro de l'étage est impair");
-            allCriteres.add("L'identifiant de la salle est un nombre impair");
-            allCriteres.add("La salle se trouve à droite du couloir");
+            allCriteres.add("La salle se situe à gauche du couloir (la position est un nombre impair)");
+            allCriteres.add("Le dernier chiffre est plus grand que l'étage de la salle");
             allCriteres.add("Le premier chiffre (étage) est plus petit que l'identifiant de la salle");
-            allCriteres.add("Le numéro de l'étage est supérieur à 200");
-            allCriteres.add("Le numéro de l'identifiant de la salle est inférieur à 50");
-            allCriteres.add("La salle se trouve à un étage inférieur à son identifiant");
+            allCriteres.add("Le numéro de l'étage est supérieur à 2");
+            allCriteres.add("Le numéro de l'identifiant de la salle est inférieur à 5");
+            allCriteres.add("La salle se trouve à un étage inférieur à sa position");
             allCriteres.add("La somme des deux derniers chiffres est inférieure à 10");
-            allCriteres.add("La salle est située dans le premier étage (moins de 400)");
-            allCriteres.add("Le numéro d'identifiant de la salle est impair et inférieur à 20");
-            allCriteres.add("L'étage est supérieur à 300");
+            allCriteres.add("La salle est située dans les 3 premiers étages (moins de 4)");
+            allCriteres.add("Le numéro d'identifiant de la salle est impair ");
             allCriteres.add("Le premier chiffre (étage) est inférieur à 4");
         } else if (numeroSalle == 411) {
-            allCriteres.add("Le numéro de l'étage est impair");
-            allCriteres.add("Le numéro d'identifiant de la salle est impair");
-            allCriteres.add("La salle se trouve à gauche du couloir");
-            allCriteres.add("Le premier chiffre (étage) est supérieur à 3");
-            allCriteres.add("Le numéro d'étage est divisible par 3");
-            allCriteres.add("L'identifiant de la salle est un nombre inférieur à 50");
-            allCriteres.add("L'étage est supérieur à l'identifiant de la salle");
-            allCriteres.add("La somme des trois chiffres est un nombre impair");
-            allCriteres.add("Le dernier chiffre de la salle est inférieur à l'identifiant");
-            allCriteres.add("La salle est située dans un étage inférieur à 500");
-            allCriteres.add("La salle est dans un étage supérieur à 200");
-            allCriteres.add("Le numéro d'identifiant de la salle est un nombre impair et inférieur à 20");
-        } else if (numeroSalle == 522) {
             allCriteres.add("Le numéro de l'étage est pair");
+            allCriteres.add("Le numéro d'identifiant de la salle est impair");
+            allCriteres.add("La salle se trouve à gauche du couloir(la position est un nombre impair)");
+            allCriteres.add("Le premier chiffre (étage) est supérieur à 3");
+            allCriteres.add("L'identifiant de la salle est un nombre inférieur à 5");
+            allCriteres.add("L'étage est supérieur à l'identifiant de la salle");
+            allCriteres.add("La somme des trois chiffres est un nombre pair");
+            allCriteres.add("Le dernier chiffre de la salle est inférieur ou égale à l'identifiant");
+            allCriteres.add("La salle est située dans un étage inférieur à 5");
+            allCriteres.add("La salle est dans un étage supérieur à 2");
+            allCriteres.add("Le numéro d'identifiant de la salle est un nombre impair et inférieur à 2");
+        } else if (numeroSalle == 522) {
+            allCriteres.add("Le numéro de l'étage est impair");
             allCriteres.add("L'identifiant de la salle est pair");
-            allCriteres.add("La salle se trouve à droite du couloir");
-            allCriteres.add("Le premier chiffre (étage) est plus petit que l'identifiant de la salle");
-            allCriteres.add("Le numéro d'étage est inférieur à 6");
-            allCriteres.add("Le deuxième chiffre de l'identifiant est un chiffre pair");
-            allCriteres.add("L'identifiant de la salle est supérieur à 20 mais inférieur à 60");
-            allCriteres.add("Le dernier chiffre est inférieur à l'identifiant de la salle");
-            allCriteres.add("La salle se trouve dans un étage inférieur à 6");
-            allCriteres.add("La salle est à un étage inférieur à son identifiant");
+            allCriteres.add("La salle se trouve à droite du couloir(la position est un nombre pair)");
+            allCriteres.add("Le premier chiffre (étage) est plus grand que l'identifiant de la salle");
+            allCriteres.add("Le numéro d'étage est supérieur ou égale à 3");
+            allCriteres.add("Le chiffre de l'identifiant est un chiffre pair");
+            allCriteres.add("L'identifiant de la salle est supérieur ou égale à 2 mais inférieur ou égale à 4");
+            allCriteres.add("Le dernier chiffre est inférieur ou égale à l'identifiant de la salle");
+            allCriteres.add("La salle est à un étage supérieur à la somme de son identifiant et sa position");
             allCriteres.add("L'identifiant de la salle est un nombre pair");
             allCriteres.add("La somme des trois chiffres est un nombre impair");
         }
