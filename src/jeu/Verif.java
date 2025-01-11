@@ -1,9 +1,11 @@
 package jeu;
 
 import java.util.List;
+import javax.swing.*;
 
 class Verif {
     private List<Critere> criteres; // Liste de critères
+    private List<JPanel> criterePanels;
     private int id;
 
     public Verif(List<Critere> criteres, int id) {
@@ -28,5 +30,13 @@ class Verif {
             }
         }
         return null; // Aucun critère validé
+    }
+
+    public void setCriterePanels(List<JPanel> criterePanels) {
+        this.criterePanels = criterePanels;
+    }
+
+    public List<JPanel> getCriterePanels() {
+        return criterePanels;
     }
 }

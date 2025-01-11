@@ -221,15 +221,18 @@ public class Main {
 
             JPanel bottomPanel = new JPanel();
             bottomPanel.setLayout(new GridLayout(1, 3, 10, 10)); // Espacement horizontal et vertical ajouté
+            List<JPanel> criterePanels = new ArrayList<>(); // Stocke les panneaux des critères
             for (Critere critere : verifier.getCriteres()) {
                 JPanel criterePanel = new JPanel();
                 criterePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
                 criterePanel.setPreferredSize(new Dimension(120, 50)); // Taille individuelle des critères ajustée
+
                 JLabel critereLabel = new JLabel(critere.getDescription(), SwingConstants.CENTER);
                 critereLabel.setFont(new Font("Roboto", Font.PLAIN, 16)); // Taille augmentée pour plus de lisibilité
                 criterePanel.add(critereLabel);
+
                 bottomPanel.add(criterePanel);
+                criterePanels.add(criterePanel); // Ajouter le panneau à la liste
             }
             verifierBox.add(bottomPanel, BorderLayout.CENTER);
 
@@ -256,6 +259,7 @@ public class Main {
             verifierBoxes.add(verifierBox);
             verifierPanel.add(verifierBox);
             verifierPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            verifier.setCriterePanels(criterePanels);
         }
 
         JScrollPane verifierScroll = new JScrollPane(verifierPanel);
@@ -357,11 +361,18 @@ public class Main {
                 showAlert("Dommage", "Le code saisi est incorrect !");
             }
             for (Verif verifier : selectedVerifiers) {
-                Critere validCritere = verifier.verifierProposition(proposition, scenario); // Passez le scénario ici
-                if (validCritere != null) {
-                    JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
+                Critere validCritere = verifier.verifierProposition(proposition, scenario);
+                for (int i = 0; i < verifier.getCriteres().size(); i++) {
+                    JPanel criterePanel = verifier.getCriterePanels().get(i);
+                    if (verifier.getCriteres().get(i).equals(validCritere)) {
+                        JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
+                        criterePanel.setBackground(Color.GREEN);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Critère invalide : " + validCritere.getDescription(), "Échec", JOptionPane.ERROR_MESSAGE);
+                        criterePanel.setBackground(Color.RED);
+                    }
+                    criterePanel.revalidate();
+                    criterePanel.repaint();
                 }
             }
 
