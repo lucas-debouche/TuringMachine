@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.AbstractMap.SimpleEntry;
 
 
 public class Main {
@@ -364,15 +365,14 @@ public class Main {
             }
             for (Verif verifier : selectedVerifiers) {
                 Critere validCritere = verifier.verifierProposition(proposition, scenario); // Passez le scénario ici
+                JPanel panel = criterePanels.get(validCritere);
                 if (validCritere != null) {
                     JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
-                    JPanel panel = criterePanels.get(validCritere);
                     panel.setBackground(Color.GREEN);
                 } else {
                     JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
                 }
             }
-
         });
 
         frame.setVisible(true);
