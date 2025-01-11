@@ -80,8 +80,13 @@ public class Main {
         styleButton(startButton);
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        JButton historiqueButton = new JButton("Afficher l'historique");
+        styleButton(historiqueButton);
+        historiqueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         welcomePanel.add(Box.createRigidArea(new Dimension(0, 200)));
         welcomePanel.add(startButton);
+        welcomePanel.add(historiqueButton);
 
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -159,6 +164,10 @@ public class Main {
             }
         });
 
+        historiqueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {}
+        });
 
 
 
