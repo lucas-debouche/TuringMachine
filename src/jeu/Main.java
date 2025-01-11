@@ -362,18 +362,20 @@ public class Main {
             }
             for (Verif verifier : selectedVerifiers) {
                 Critere validCritere = verifier.verifierProposition(proposition, scenario);
-                for (int i = 0; i < verifier.getCriteres().size(); i++) {
-                    JPanel criterePanel = verifier.getCriterePanels().get(i);
-                    if (verifier.getCriteres().get(i).equals(validCritere)) {
-                        JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
-                        criterePanel.setBackground(Color.GREEN);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Critère invalide : " + validCritere.getDescription(), "Échec", JOptionPane.ERROR_MESSAGE);
-                        criterePanel.setBackground(Color.RED);
-                    }
+                if (validCritere != null) {
+                    JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    JPanel criterePanel = verifier.getCriterePanels().get(verifier.getCriteres().indexOf(validCritere));
+                    criterePanel.setBackground(Color.GREEN);
+                    criterePanel.revalidate();
+                    criterePanel.repaint();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
+                    JPanel criterePanel = verifier.getCriterePanels().get(verifier.getId() - 1); // Id ou index correspondant
+                    criterePanel.setBackground(Color.RED);
                     criterePanel.revalidate();
                     criterePanel.repaint();
                 }
+
             }
 
         });
