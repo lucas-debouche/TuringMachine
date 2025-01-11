@@ -5,38 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Joueur {
-    private String nom;
-    private int score;
-    private List<Proposition> historiquePropositions;
+    private List<Partie> historiqueParties;
 
-    public Joueur(String nom) {
-        this.nom = nom;
-        this.score = 0;
-        this.historiquePropositions = new ArrayList<>();
+    public Joueur() {
+        this.historiqueParties = new ArrayList<>();
     }
 
-    public void faireProposition(Proposition proposition) {
-        historiquePropositions.add(proposition);
-        System.out.println(nom + " a fait une proposition: " + proposition);
+    public void addPartie(Partie p) {
+        this.historiqueParties.add(p);
     }
 
-    public void quitterPartie() {
-        System.out.println(nom + " a quitté la partie.");
+    public List<Partie> getHistoriqueParties() {
+        return historiqueParties;
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public List<Proposition> getHistoriquePropositions() {
-        return historiquePropositions;
-    }
-
-    public void incrementerScore() {
-        this.score++;
-    }
 }

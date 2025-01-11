@@ -17,5 +17,4 @@ class Machine {
     public List<Verif> getVerifyers() {
         return verifyers;
     }
-
 }

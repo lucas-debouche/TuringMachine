@@ -14,11 +14,16 @@ import java.util.AbstractMap.SimpleEntry;
 
 public class Main {
 
-    private final Machine machine;
+    private static Machine machine;
     private Scenario scenario;
+    private static Joueur joueur = new Joueur();
+    private Partie partie;
     private final Map<Critere, JPanel> criterePanels = new HashMap<>();
 
     public Main() {
+        for (Partie partie : joueur.getHistoriqueParties()) {
+            System.out.println(partie.nom);
+        }
         machine = new Machine();
         JFrame frame = new JFrame("Machine Turing");
 
@@ -105,77 +110,11 @@ public class Main {
                     verifierCount = 6;
                 }
 
-                // Générer un code aléatoire
-                Scenario scenario = new Scenario(getRandomScenario());
-
-                // Créer le scénario avec le numéro de salle et le code correct
-
-                machine.getVerifyers().clear();
-
-                // Ajouter les vérificateurs (logique inchangée)
-                for (int i = 1; i <= verifierCount; i++) {
-                    switch (i) {
-                        case 1:
-                            machine.ajouterVerifier(new Verif(
-                                    List.of(
-                                            new Critere("🟣 impaire"),
-                                            new Critere("🟣 paire"),
-                                            new Critere("🟣 = 5")
-                                    ), 1));
-                            break;
-                        case 2:
-                            machine.ajouterVerifier(new Verif(
-                                    List.of(
-                                            new Critere("🔶 < 🏠"),
-                                            new Critere("🔶 = 🏠"),
-                                            new Critere("🔶 > 🏠")
-                                    ), 2));
-                            break;
-                        case 3:
-                            machine.ajouterVerifier(new Verif(
-                                    List.of(
-                                            new Critere("🟣 + 🏠 < 10"),
-                                            new Critere("🟣 + 🏠 = 10"),
-                                            new Critere("🟣 + 🏠 > 10")
-                                    ), 3));
-                            break;
-                        case 4:
-                            machine.ajouterVerifier(new Verif(
-                                    List.of(
-                                            new Critere("🟣 > 🏠 et 🔶"),
-                                            new Critere("🏠 < 🔶 et 🟣"),
-                                            new Critere("🔶 > 🏠 et 🟣")
-                                    ), 4));
-                            break;
-                        case 5:
-                            machine.ajouterVerifier(new Verif(
-                                    List.of(
-                                            new Critere("🟣 multiple de 2"),
-                                            new Critere("🟣 multiple de 3"),
-                                            new Critere("🟣 multiple de 5")
-                                    ), 5));
-                            break;
-                        case 6:
-                            machine.ajouterVerifier(new Verif(
-                                    List.of(
-                                            new Critere("Toutes différentes"),
-                                            new Critere("Deux égales une différente"),
-                                            new Critere("Toutes égales")
-                                    ), 6));
-                            break;
-                    }
-                }
-
-                startGame(frame,scenario);
+                startGame(frame, verifierCount, null);
             }
         });
 
-        historiqueButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {}
-        });
-
-
+        historiqueButton.addActionListener(e -> {historique(frame, joueur);});
 
         frame.add(welcomePanel, BorderLayout.CENTER);
         frame.setVisible(true);
@@ -194,7 +133,71 @@ public class Main {
     }
 
 
-    private void startGame(JFrame frame,Scenario scenario) {
+    private void startGame(JFrame frame, int verifierCount, Partie partie) {
+        // Générer un code aléatoire
+        Scenario scenario = new Scenario(getRandomScenario());
+
+        // Créer le scénario avec le numéro de salle et le code correct
+
+        machine.getVerifyers().clear();
+
+        // Ajouter les vérificateurs (logique inchangée)
+        for (int i = 1; i <= verifierCount; i++) {
+            switch (i) {
+                case 1:
+                    machine.ajouterVerifier(new Verif(
+                            List.of(
+                                    new Critere("🟣 impaire"),
+                                    new Critere("🟣 paire"),
+                                    new Critere("🟣 = 5")
+                            ), 1));
+                    break;
+                case 2:
+                    machine.ajouterVerifier(new Verif(
+                            List.of(
+                                    new Critere("🔶 < 🏠"),
+                                    new Critere("🔶 = 🏠"),
+                                    new Critere("🔶 > 🏠")
+                            ), 2));
+                    break;
+                case 3:
+                    machine.ajouterVerifier(new Verif(
+                            List.of(
+                                    new Critere("🟣 + 🏠 < 10"),
+                                    new Critere("🟣 + 🏠 = 10"),
+                                    new Critere("🟣 + 🏠 > 10")
+                            ), 3));
+                    break;
+                case 4:
+                    machine.ajouterVerifier(new Verif(
+                            List.of(
+                                    new Critere("🟣 > 🏠 et 🔶"),
+                                    new Critere("🏠 < 🔶 et 🟣"),
+                                    new Critere("🔶 > 🏠 et 🟣")
+                            ), 4));
+                    break;
+                case 5:
+                    machine.ajouterVerifier(new Verif(
+                            List.of(
+                                    new Critere("🟣 multiple de 2"),
+                                    new Critere("🟣 multiple de 3"),
+                                    new Critere("🟣 multiple de 5")
+                            ), 5));
+                    break;
+                case 6:
+                    machine.ajouterVerifier(new Verif(
+                            List.of(
+                                    new Critere("Toutes différentes"),
+                                    new Critere("Deux égales une différente"),
+                                    new Critere("Toutes égales")
+                            ), 6));
+                    break;
+            }
+        }
+        if (partie == null) {
+            partie = new Partie(true, verifierCount);
+        }
+
         // Supprimer l'écran d'introduction
         frame.getContentPane().removeAll();
 
@@ -334,6 +337,15 @@ public class Main {
         verifyPanel.add(verifyButton);
         frame.add(verifyPanel, BorderLayout.SOUTH);
 
+        // Bouton de retour à la page d'accueil
+        JPanel backPanel = new JPanel(new BorderLayout());
+        JButton backButton = new JButton("⬅ Retour à la page d'accueil");
+        backButton.setFocusable(false);
+        backButton.setPreferredSize(new Dimension(200, 25));
+        backPanel.add(backButton, BorderLayout.EAST);
+        frame.add(backPanel, BorderLayout.NORTH);
+
+
         verifyButton.addActionListener(e -> {
 
             if (selectedVerifiers.size() != 3) {
@@ -375,10 +387,92 @@ public class Main {
             }
         });
 
+        Partie p = partie;
+        backButton.addActionListener(e -> {
+            if (!joueur.getHistoriqueParties().contains(p)) {
+                joueur.addPartie(p);
+            }
+            p.terminerPartie();
+
+            // Fermer la fenêtre actuelle
+            frame.dispose();
+
+            // Relancer la méthode main
+            new Main();
+        });
         frame.setVisible(true);
     }
 
 
+    private void historique(JFrame frame, Joueur joueur) {
+        // Supprimer l'écran d'introduction
+        frame.getContentPane().removeAll();
+
+        // Panel principal
+        JPanel historiquePanel = new JPanel();
+        historiquePanel.setLayout(new BorderLayout());
+
+        // Titre
+        JLabel titleLabel = new JLabel("Historique des parties", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        historiquePanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Panel pour les boutons de l'historique
+        JPanel historyPanel = new JPanel();
+        historyPanel.setLayout(new GridLayout(0, 1, 5, 5)); // Une colonne, espacement vertical de 5
+
+        historyPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Colonne
+        gbc.gridy = 0; // Ligne
+        gbc.anchor = GridBagConstraints.CENTER; // Centrer le bouton dans la cellule
+        gbc.insets = new Insets(10, 0, 10, 0); // Espacement vertical
+
+        if (!joueur.getHistoriqueParties().isEmpty()) {
+            for (Partie partie : joueur.getHistoriqueParties()) {
+                JButton partieButton = new JButton(partie.nom);
+                partieButton.setFocusable(false);
+
+                // Définir la taille du bouton
+                partieButton.setPreferredSize(new Dimension(300, 80));
+                partieButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+                partieButton.addActionListener(e -> {
+                    startGame(frame, partie.verifierCount, partie);
+                });
+
+                // Ajouter le bouton à historyPanel avec GridBagLayout
+                historyPanel.add(partieButton, gbc);
+                gbc.gridy++; // Passer à la ligne suivante pour le prochain bouton
+            }
+        } else {
+            JLabel noPartiesLabel = new JLabel("Aucune partie enregistrée.", SwingConstants.CENTER);
+            noPartiesLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            historyPanel.add(noPartiesLabel, gbc);
+        }
+
+        // ScrollPane pour gérer les boutons s'il y en a trop
+        JScrollPane scrollPane = new JScrollPane(historyPanel);
+        historiquePanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Bouton de retour à la page d'accueil
+        JButton backButton = new JButton("⬅ Retour à la page d'accueil");
+        backButton.setFocusable(false);
+        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        historiquePanel.add(backButton, BorderLayout.SOUTH);
+
+        backButton.addActionListener(e -> {
+            // Fermer la fenêtre actuelle
+            frame.dispose();
+
+            // Relancer la méthode main
+            new Main();
+        });
+
+        // Ajouter le panel principal à la frame
+        frame.add(historiquePanel);
+        frame.setVisible(true);
+    }
 
     private void showAlert(String title, String message) {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
