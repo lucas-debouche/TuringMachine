@@ -115,7 +115,7 @@ public class Main {
                                     List.of(
                                             new Critere("🟣 impaire"),
                                             new Critere("🟣 paire"),
-                                            new Critere("🟣 = 5")
+                                            new Critere("🟣 = 0")
                                     ), 1));
                             break;
                         case 2:
@@ -370,7 +370,7 @@ public class Main {
                     criterePanel.repaint();
                 } else {
                     JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
-                    JPanel criterePanel = verifier.getCriterePanels().get(verifier.getId() - 1); // Id ou index correspondant
+                    JPanel criterePanel = verifier.getCriterePanels().get(verifier.getId()); // Id ou index correspondant
                     criterePanel.setBackground(Color.RED);
                     criterePanel.revalidate();
                     criterePanel.repaint();
