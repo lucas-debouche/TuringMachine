@@ -31,12 +31,4 @@ class Verif {
         }
         return null; // Aucun critère validé
     }
-
-    public void setCriterePanels(List<JPanel> criterePanels) {
-        this.criterePanels = criterePanels;
-    }
-
-    public List<JPanel> getCriterePanels() {
-        return criterePanels;
-    }
 }

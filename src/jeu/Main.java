@@ -7,11 +7,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Map;
+import java.util.HashMap;
+
 
 public class Main {
 
     private final Machine machine;
     private Scenario scenario;
+    private final Map<Critere, JPanel> criterePanels = new HashMap<>();
 
     public Main() {
         machine = new Machine();
@@ -230,6 +234,8 @@ public class Main {
                 critereLabel.setFont(new Font("Roboto", Font.PLAIN, 16)); // Taille augmentée pour plus de lisibilité
                 criterePanel.add(critereLabel);
                 bottomPanel.add(criterePanel);
+
+                criterePanels.put(critere, criterePanel);
             }
             verifierBox.add(bottomPanel, BorderLayout.CENTER);
 
@@ -360,6 +366,8 @@ public class Main {
                 Critere validCritere = verifier.verifierProposition(proposition, scenario); // Passez le scénario ici
                 if (validCritere != null) {
                     JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    JPanel panel = criterePanels.get(validCritere);
+                    panel.setBackground(Color.GREEN);
                 } else {
                     JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
                 }
