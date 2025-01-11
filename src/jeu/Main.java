@@ -86,6 +86,7 @@ public class Main {
 
         welcomePanel.add(Box.createRigidArea(new Dimension(0, 200)));
         welcomePanel.add(startButton);
+        welcomePanel.add(Box.createRigidArea(new Dimension(0, 50)));
         welcomePanel.add(historiqueButton);
 
         startButton.addActionListener(new ActionListener() {
