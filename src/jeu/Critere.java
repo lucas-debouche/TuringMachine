@@ -55,40 +55,40 @@ class Critere {
                     return position % 2 == 0;
                 }
                 return false;
-            case "🟣 = 0":
-                if (proposition.getValeurs().get(2) == 0) {
+            case "🟣 = 5":
+                if (proposition.getValeurs().get(2) == 5) {
                     return position == 5;
                 }
                 return false;
 
             case "🟣 + 🏠 < 10":
-                if ((proposition.getValeurs().get(2) + proposition.getValeurs().get(0)) < 10) {
+                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) < 10) {
                     return position + etage < 10;
                 }
                 return false;
             case "🟣 + 🏠 = 10":
-                if ((proposition.getValeurs().get(2) + proposition.getValeurs().get(0)) == 10) {
+                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) == 10) {
                     return position + etage == 10;
                 }
                 return false;
             case "🟣 + 🏠 > 10":
-                if ((proposition.getValeurs().get(2) + proposition.getValeurs().get(0)) > 10) {
+                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) > 10) {
                     return position + etage > 10;
                 }
                 return false;
 
             case "🟣 > 🏠 et 🔶":
-                if ((proposition.getValeurs().get(2) > proposition.getValeurs().get(0)) && (proposition.getValeurs().get(2) > proposition.getValeurs().get(1))) {
+                if (proposition.getValeurs().get(2) > proposition.getValeurs().get(0) && proposition.getValeurs().get(2) > proposition.getValeurs().get(1)) {
                     return position > etage && position > salle;
                 }
                 return false;
             case "🏠 < 🔶 et 🟣":
-                if ((proposition.getValeurs().get(0) < proposition.getValeurs().get(1)) && (proposition.getValeurs().get(0) < proposition.getValeurs().get(2))) {
+                if (proposition.getValeurs().get(0) < proposition.getValeurs().get(1) && proposition.getValeurs().get(0) < proposition.getValeurs().get(2)) {
                     return etage < salle && etage < position;
                 }
                 return false;
             case "🔶 > 🏠 et 🟣":
-                if ((proposition.getValeurs().get(1) > proposition.getValeurs().get(0)) && (proposition.getValeurs().get(1) > proposition.getValeurs().get(2))) {
+                if (proposition.getValeurs().get(1) > proposition.getValeurs().get(0) && proposition.getValeurs().get(1) > proposition.getValeurs().get(2)) {
                     return salle > etage && salle > position;
                 }
 

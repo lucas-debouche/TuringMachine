@@ -115,7 +115,7 @@ public class Main {
                                     List.of(
                                             new Critere("🟣 impaire"),
                                             new Critere("🟣 paire"),
-                                            new Critere("🟣 = 0")
+                                            new Critere("🟣 = 5")
                                     ), 1));
                             break;
                         case 2:
