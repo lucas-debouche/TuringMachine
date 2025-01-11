@@ -14,17 +14,14 @@ import java.util.AbstractMap.SimpleEntry;
 
 public class Main {
 
-    private static Machine machine;
-    private Scenario scenario;
+    private static Machine machine = new Machine();
+    private static Scenario scenario;
     private static Joueur joueur = new Joueur();
     private Partie partie;
-    private final Map<Critere, JPanel> criterePanels = new HashMap<>();
+    private Verif verif;
+    private static Map<Critere, JPanel> criterePanels = new HashMap<>();
 
     public Main() {
-        for (Partie partie : joueur.getHistoriqueParties()) {
-            System.out.println(partie.nom);
-        }
-        machine = new Machine();
         JFrame frame = new JFrame("Machine Turing");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,7 +106,66 @@ public class Main {
                 } else if (verifier6.isSelected()) {
                     verifierCount = 6;
                 }
+                // Générer un code aléatoire
+                scenario = new Scenario(getRandomScenario());
 
+                // Créer le scénario avec le numéro de salle et le code correct
+
+                machine.getVerifyers().clear();
+
+                // Ajouter les vérificateurs (logique inchangée)
+                for (int i = 1; i <= verifierCount; i++) {
+                    switch (i) {
+                        case 1:
+                            machine.ajouterVerifier(new Verif(
+                                    List.of(
+                                            new Critere("🟣 impaire"),
+                                            new Critere("🟣 paire"),
+                                            new Critere("🟣 = 5")
+                                    ), 1));
+                            break;
+                        case 2:
+                            machine.ajouterVerifier(new Verif(
+                                    List.of(
+                                            new Critere("🔶 < 🏠"),
+                                            new Critere("🔶 = 🏠"),
+                                            new Critere("🔶 > 🏠")
+                                    ), 2));
+                            break;
+                        case 3:
+                            machine.ajouterVerifier(new Verif(
+                                    List.of(
+                                            new Critere("🟣 + 🏠 < 6"),
+                                            new Critere("🟣 + 🏠 = 6"),
+                                            new Critere("🟣 + 🏠 > 6")
+                                    ), 3));
+                            break;
+                        case 4:
+                            machine.ajouterVerifier(new Verif(
+                                    List.of(
+                                            new Critere("🟣 > 🏠 et 🔶"),
+                                            new Critere("🏠 < 🔶 et 🟣"),
+                                            new Critere("🔶 > 🏠 et 🟣")
+                                    ), 4));
+                            break;
+                        case 5:
+                            machine.ajouterVerifier(new Verif(
+                                    List.of(
+                                            new Critere("🟣 multiple de 2"),
+                                            new Critere("🟣 multiple de 3"),
+                                            new Critere("🟣 multiple de 5")
+                                    ), 5));
+                            break;
+                        case 6:
+                            machine.ajouterVerifier(new Verif(
+                                    List.of(
+                                            new Critere("Toutes différentes"),
+                                            new Critere("Deux égales une différente"),
+                                            new Critere("Toutes égales")
+                                    ), 6));
+                            break;
+                    }
+                }
                 startGame(frame, verifierCount, null);
             }
         });
@@ -134,66 +190,6 @@ public class Main {
 
 
     private void startGame(JFrame frame, int verifierCount, Partie partie) {
-        // Générer un code aléatoire
-        Scenario scenario = new Scenario(getRandomScenario());
-
-        // Créer le scénario avec le numéro de salle et le code correct
-
-        machine.getVerifyers().clear();
-
-        // Ajouter les vérificateurs (logique inchangée)
-        for (int i = 1; i <= verifierCount; i++) {
-            switch (i) {
-                case 1:
-                    machine.ajouterVerifier(new Verif(
-                            List.of(
-                                    new Critere("🟣 impaire"),
-                                    new Critere("🟣 paire"),
-                                    new Critere("🟣 = 5")
-                            ), 1));
-                    break;
-                case 2:
-                    machine.ajouterVerifier(new Verif(
-                            List.of(
-                                    new Critere("🔶 < 🏠"),
-                                    new Critere("🔶 = 🏠"),
-                                    new Critere("🔶 > 🏠")
-                            ), 2));
-                    break;
-                case 3:
-                    machine.ajouterVerifier(new Verif(
-                            List.of(
-                                    new Critere("🟣 + 🏠 < 10"),
-                                    new Critere("🟣 + 🏠 = 10"),
-                                    new Critere("🟣 + 🏠 > 10")
-                            ), 3));
-                    break;
-                case 4:
-                    machine.ajouterVerifier(new Verif(
-                            List.of(
-                                    new Critere("🟣 > 🏠 et 🔶"),
-                                    new Critere("🏠 < 🔶 et 🟣"),
-                                    new Critere("🔶 > 🏠 et 🟣")
-                            ), 4));
-                    break;
-                case 5:
-                    machine.ajouterVerifier(new Verif(
-                            List.of(
-                                    new Critere("🟣 multiple de 2"),
-                                    new Critere("🟣 multiple de 3"),
-                                    new Critere("🟣 multiple de 5")
-                            ), 5));
-                    break;
-                case 6:
-                    machine.ajouterVerifier(new Verif(
-                            List.of(
-                                    new Critere("Toutes différentes"),
-                                    new Critere("Deux égales une différente"),
-                                    new Critere("Toutes égales")
-                            ), 6));
-                    break;
-            }
-        }
         if (partie == null) {
             partie = new Partie(true, verifierCount);
         }
@@ -378,11 +374,12 @@ public class Main {
             for (Verif verifier : selectedVerifiers) {
                 Critere validCritere = verifier.verifierProposition(proposition, scenario); // Passez le scénario ici
                 JPanel panel = criterePanels.get(validCritere);
-                if (validCritere != null) {
+                if (validCritere.valide == 2) {
                     JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
                     panel.setBackground(Color.GREEN);
-                } else {
+                } else if (validCritere.valide == 1) {
                     JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
+                    panel.setBackground(Color.RED);
                 }
             }
         });
@@ -438,7 +435,28 @@ public class Main {
                 partieButton.setFont(new Font("Arial", Font.BOLD, 20));
 
                 partieButton.addActionListener(e -> {
+                    for (Critere critere : criterePanels.keySet()) {
+                        System.out.println(critere.valide);
+                    }
+                    System.out.println(" ");
                     startGame(frame, partie.verifierCount, partie);
+
+                    for (Critere critere : criterePanels.keySet()) {
+                        System.out.println(critere.valide);
+                    }
+
+                    for (Verif verifier : machine.getVerifyers()) {  // Vérifiez chaque vérificateur
+                        for (Critere critere : verifier.getCriteres()) {
+                            JPanel panel = criterePanels.get(critere);  // Récupérer le panneau pour chaque critère
+                            if (panel != null) {
+                                if (critere.valide == 2) {
+                                    panel.setBackground(Color.GREEN);  // Si valide, vert
+                                } else if (critere.valide == 1) {
+                                    panel.setBackground(Color.RED);  // Si non valide, rouge
+                                }
+                            }
+                        }
+                    }
                 });
 
                 // Ajouter le bouton à historyPanel avec GridBagLayout

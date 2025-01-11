@@ -1,9 +1,11 @@
 package jeu;
 
 import java.util.List;
+import java.util.Objects;
 
 class Critere {
     private String description;
+    public int valide = 0;
 
     public Critere(String description) {
         this.description = description;
@@ -13,7 +15,7 @@ class Critere {
         return description;
     }
 
-    public boolean verifierCondition(Proposition proposition, Scenario scenario) {
+    public boolean verifierCondition(Proposition proposition, Scenario scenario, Critere critere) {
         // Vérifiez que la proposition contient 3 valeurs
         if (proposition.getValeurs().size() != 3) {
             throw new IllegalArgumentException("La proposition doit contenir exactement 3 valeurs.");
@@ -25,114 +27,136 @@ class Critere {
 
         System.out.println(scenario.getCodeCorrect());
         // Vérifiez la description du critère
-        switch (description) {
-
-
-            case "🔶 < 🏠" :
+        return switch (description) {
+            case "🔶 < 🏠" -> {
                 if (proposition.getValeurs().get(1) < proposition.getValeurs().get(0)) {
-                    return salle < etage;
+                    critere.valide = (salle < etage) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🔶 = 🏠":
-                if (proposition.getValeurs().get(1) == proposition.getValeurs().get(0)) {
-                    return salle == etage;
+                yield false;
+            }
+            case "🔶 = 🏠" -> {
+                if (Objects.equals(proposition.getValeurs().get(1), proposition.getValeurs().get(0))) {
+                    critere.valide = (salle == etage) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-
-            case "🔶 > 🏠":
+                yield false;
+            }
+            case "🔶 > 🏠" -> {
                 if (proposition.getValeurs().get(1) > proposition.getValeurs().get(0)) {
-                    return salle > etage;
+                    critere.valide = (salle > etage) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-
-            case "🟣 impaire":
-                if (proposition.getValeurs().get(2) % 2 != 0) {
-                    return position % 2 != 0;
+                yield false;
+            }
+            case "🟣 impaire" -> {
+                if (proposition.getValeurs().get(2) % 2 != 0 && proposition.getValeurs().get(2) != 5) {
+                    critere.valide = (position % 2 != 0) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🟣 paire":
+                yield false;
+            }
+            case "🟣 paire", "🟣 multiple de 2" -> {
                 if (proposition.getValeurs().get(2) % 2 == 0) {
-                    return position % 2 == 0;
+                    critere.valide = (position % 2 == 0) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🟣 = 5":
+                yield false;
+            }
+            case "🟣 = 5" -> {
                 if (proposition.getValeurs().get(2) == 5) {
-                    return position == 5;
+                    critere.valide = (position == 5) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-
-            case "🟣 + 🏠 < 10":
+                yield false;
+            }
+            case "🟣 + 🏠 < 6" -> {
                 if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) < 10) {
-                    return position + etage < 10;
+                    critere.valide = (position + etage < 6) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🟣 + 🏠 = 10":
+                yield false;
+            }
+            case "🟣 + 🏠 = 6" -> {
                 if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) == 10) {
-                    return position + etage == 10;
+                    critere.valide = (position + etage == 6) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🟣 + 🏠 > 10":
+                yield false;
+            }
+            case "🟣 + 🏠 > 6" -> {
                 if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) > 10) {
-                    return position + etage > 10;
+                    critere.valide = (position + etage > 6) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-
-            case "🟣 > 🏠 et 🔶":
+                yield false;
+            }
+            case "🟣 > 🏠 et 🔶" -> {
                 if (proposition.getValeurs().get(2) > proposition.getValeurs().get(0) && proposition.getValeurs().get(2) > proposition.getValeurs().get(1)) {
-                    return position > etage && position > salle;
+                    critere.valide = (position > etage && position > salle) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🏠 < 🔶 et 🟣":
+                yield false;
+            }
+            case "🏠 < 🔶 et 🟣" -> {
                 if (proposition.getValeurs().get(0) < proposition.getValeurs().get(1) && proposition.getValeurs().get(0) < proposition.getValeurs().get(2)) {
-                    return etage < salle && etage < position;
+                    critere.valide = (etage < salle && etage < position) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🔶 > 🏠 et 🟣":
+                yield false;
+            }
+            case "🔶 > 🏠 et 🟣" -> {
                 if (proposition.getValeurs().get(1) > proposition.getValeurs().get(0) && proposition.getValeurs().get(1) > proposition.getValeurs().get(2)) {
-                    return salle > etage && salle > position;
+                    critere.valide = (salle > etage && salle > position) ? 2 : 1;
+                    yield true;
                 }
-
-                return false;
-            case "🟣 multiple de 2":
-                if (proposition.getValeurs().get(2) % 2 == 0) {
-                    return position % 2 == 0;
-                }
-                return false;
-            case "🟣 multiple de 3":
+                yield false;
+            }
+            case "🟣 multiple de 3" -> {
                 if (proposition.getValeurs().get(2) % 3 == 0) {
-                    return position % 3 == 0;
+                    critere.valide = (position % 3 == 0) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "🟣 multiple de 5":
+                yield false;
+            }
+            case "🟣 multiple de 5" -> {
                 if (proposition.getValeurs().get(2) % 5 == 0) {
-                    return position % 5 == 0;
+                    critere.valide = (position % 5 == 0) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-
-            case "Toutes différentes":
-                if (proposition.getValeurs().get(0) != proposition.getValeurs().get(1) && proposition.getValeurs().get(0) != proposition.getValeurs().get(2) && proposition.getValeurs().get(1) != proposition.getValeurs().get(2)) {
-                    return etage != salle && etage != position && salle != position;
+                yield false;
+            }
+            case "Toutes différentes" -> {
+                if (!Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(1)) &&
+                        !Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(2)) &&
+                        !Objects.equals(proposition.getValeurs().get(1), proposition.getValeurs().get(2))) {
+                    critere.valide = (etage != salle && etage != position && salle != position) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-            case "Deux égales une différente":
-                if (proposition.getValeurs().get(0) == proposition.getValeurs().get(1) && proposition.getValeurs().get(0) != proposition.getValeurs().get(2) ||
-                        (proposition.getValeurs().get(0) == proposition.getValeurs().get(2) && proposition.getValeurs().get(0) != proposition.getValeurs().get(1)) ||
-                        (proposition.getValeurs().get(1) == proposition.getValeurs().get(2) && proposition.getValeurs().get(1) != proposition.getValeurs().get(0))) {
-                    return (etage == salle && etage != position) ||
+                yield false;
+            }
+            case "Deux égales une différente" -> {
+                if ((Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(1)) && !Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(2))) ||
+                        (Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(2)) && !Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(1))) ||
+                        (Objects.equals(proposition.getValeurs().get(1), proposition.getValeurs().get(2)) && !Objects.equals(proposition.getValeurs().get(1), proposition.getValeurs().get(0)))) {
+                    critere.valide = ((etage == salle && etage != position) ||
                             (etage == position && etage != salle) ||
-                            (salle == position && salle != etage);
+                            (salle == position && salle != etage)) ? 2 : 1;
+                    yield true;
                 }
-                return false;
-
-            case "Toutes égales":
-                if (proposition.getValeurs().get(0) == proposition.getValeurs().get(1) && proposition.getValeurs().get(0) == proposition.getValeurs().get(2)) {
-                    return etage == salle && etage == position && salle == position;
+                yield false;
+            }
+            case "Toutes égales" -> {
+                if (Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(1)) &&
+                        Objects.equals(proposition.getValeurs().get(0), proposition.getValeurs().get(2))) {
+                    critere.valide = (etage == salle && etage == position) ? 2 : 1;
+                    yield true;
                 }
-                return false;
+                yield false;
+            }
 
-            default:
-                throw new IllegalArgumentException("Critère inconnu : " + description);
-        }
+            default -> throw new IllegalArgumentException("Critère inconnu : " + description);
+        };
     }
 
 }

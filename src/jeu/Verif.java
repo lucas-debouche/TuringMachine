@@ -25,7 +25,7 @@ class Verif {
     public Critere verifierProposition(Proposition proposition, Scenario scenario) {
         // Parcourir les critères et retourner le premier qui valide la proposition
         for (Critere critere : criteres) {
-            if (critere.verifierCondition(proposition,scenario)) {
+            if (critere.verifierCondition(proposition,scenario, critere)) {
                 return critere; // Critère validé
             }
         }

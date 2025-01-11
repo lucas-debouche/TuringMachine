@@ -23,10 +23,6 @@ public class Partie {
         return "#" + id + " " + verifierCount;
     }
 
-    public boolean isEtatPartie() {
-        return etatPartie;
-    }
-
     public void terminerPartie() {
         this.etatPartie = false;
     }
