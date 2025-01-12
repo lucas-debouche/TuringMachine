@@ -401,13 +401,16 @@ public class Main {
             for (Verif verifier : selectedVerifiers) {
                 Critere validCritere = verifier.verifierProposition(proposition, scenario); // Passez le scénario ici
                 JPanel panel = criterePanels.get(validCritere);
-                if (validCritere.valide == 2) {
-                    JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
-                    panel.setBackground(Color.GREEN);
-                } else if (validCritere.valide == 1) {
-                    JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
-                    panel.setBackground(Color.RED);
+                if (validCritere != null){
+                    if (validCritere.valide == 2) {
+                        JOptionPane.showMessageDialog(null, "Critère validé : " + validCritere.getDescription(), "Succès", JOptionPane.INFORMATION_MESSAGE);
+                        panel.setBackground(Color.GREEN);
+                    } else if (validCritere.valide == 1) {
+                        JOptionPane.showMessageDialog(null, "Aucun critère validé pour Vérificateur " + verifier.getId(), "Échec", JOptionPane.ERROR_MESSAGE);
+                        panel.setBackground(Color.RED);
+                    }
                 }
+
             }
         });
 
