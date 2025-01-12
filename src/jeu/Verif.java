@@ -1,8 +1,6 @@
 package jeu;
 
 import java.util.List;
-import javax.swing.*;
-import java.util.AbstractMap.SimpleEntry;
 
 class Verif {
     private List<Critere> criteres; // Liste de critères

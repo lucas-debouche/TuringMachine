@@ -1,6 +1,5 @@
 package jeu;
 
-import java.util.List;
 import java.util.Objects;
 
 class Critere {

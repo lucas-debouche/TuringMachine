@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.AbstractMap.SimpleEntry;
 
 
 public class Main {
@@ -17,8 +16,6 @@ public class Main {
     private static Machine machine = new Machine();
     private static Scenario scenario;
     private static Joueur joueur = new Joueur();
-    private Partie partie;
-    private Verif verif;
     private static Map<Critere, JPanel> criterePanels = new HashMap<>();
 
     public Main() {
@@ -469,15 +466,7 @@ public class Main {
                 partieButton.setFont(new Font("Arial", Font.BOLD, 20));
 
                 partieButton.addActionListener(e -> {
-                    for (Critere critere : criterePanels.keySet()) {
-                        System.out.println(critere.valide);
-                    }
-                    System.out.println(" ");
                     startGame(frame, partie.verifierCount, partie);
-
-                    for (Critere critere : criterePanels.keySet()) {
-                        System.out.println(critere.valide);
-                    }
 
                     for (Verif verifier : machine.getVerifyers()) {  // Vérifiez chaque vérificateur
                         for (Critere critere : verifier.getCriteres()) {
