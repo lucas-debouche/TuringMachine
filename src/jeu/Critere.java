@@ -23,6 +23,10 @@ class Critere {
         int etage = scenario.getEtage(); // 🏠 : Etage
         int salle = scenario.getSalle(); // 🔶 : Salle
         int position = scenario.getPosition(); // 🟣 : Position
+        System.out.println(proposition.getValeurs());
+        System.out.println(proposition.getValeurs().get(0) + proposition.getValeurs().get(2));
+        System.out.println(etage + position);
+
 
         System.out.println(scenario.getCodeCorrect());
         // Vérifiez la description du critère
@@ -90,21 +94,21 @@ class Critere {
                 }
                 yield false;
             }
-            case "🟣 > 🏠 et 🔶" -> {
+            case "🟣 >= 🏠 et 🔶" -> {
                 if (proposition.getValeurs().get(2) > proposition.getValeurs().get(0) && proposition.getValeurs().get(2) > proposition.getValeurs().get(1)) {
                     critere.valide = (position > etage && position > salle) ? 2 : 1;
                     yield true;
                 }
                 yield false;
             }
-            case "🏠 < 🔶 et 🟣" -> {
+            case "🏠 <= 🔶 et 🟣" -> {
                 if (proposition.getValeurs().get(0) < proposition.getValeurs().get(1) && proposition.getValeurs().get(0) < proposition.getValeurs().get(2)) {
                     critere.valide = (etage < salle && etage < position) ? 2 : 1;
                     yield true;
                 }
                 yield false;
             }
-            case "🔶 > 🏠 et 🟣" -> {
+            case "🔶 >= 🏠 et 🟣" -> {
                 if (proposition.getValeurs().get(1) > proposition.getValeurs().get(0) && proposition.getValeurs().get(1) > proposition.getValeurs().get(2)) {
                     critere.valide = (salle > etage && salle > position) ? 2 : 1;
                     yield true;
