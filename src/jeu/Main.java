@@ -338,6 +338,8 @@ public class Main {
 
         inputPanel.add(centerPanel, BorderLayout.CENTER);
 
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BorderLayout());
 
         JPanel verifyPanel = new JPanel();
         verifyPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
@@ -345,8 +347,7 @@ public class Main {
         styleButton(verifyButton);
         verifyButton.setPreferredSize(new Dimension(200, 50));
         verifyPanel.add(verifyButton);
-
-        inputPanel.add(verifyPanel, BorderLayout.SOUTH);
+        southPanel.add(verifyPanel, BorderLayout.CENTER);
 
         // Bouton de retour à la page d'accueil
         JPanel backPanel = new JPanel(new BorderLayout());
@@ -357,6 +358,17 @@ public class Main {
         backPanel.add(backButton, BorderLayout.EAST);
         inputPanel.add(backPanel, BorderLayout.NORTH);
 
+        // Bouton de retour à la page d'accueil
+        JPanel showCodePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Aligner à droite
+        JButton showCodeButton = new JButton("Afficher le code");
+        showCodeButton.setFocusable(false);
+        showCodeButton.setPreferredSize(new Dimension(250, 40));
+        showCodeButton.setBackground(new Color(200, 200, 200));
+        showCodePanel.add(showCodeButton);
+
+        southPanel.add(showCodePanel, BorderLayout.SOUTH);
+
+        inputPanel.add(southPanel, BorderLayout.SOUTH);
         frame.add(inputPanel, BorderLayout.CENTER);
 
 
@@ -414,6 +426,10 @@ public class Main {
 
             // Relancer la méthode main
             new Main();
+        });
+
+        showCodeButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Code : " + scenario.getCodeCorrect(), "CODE", JOptionPane.INFORMATION_MESSAGE);
         });
         frame.setVisible(true);
     }
