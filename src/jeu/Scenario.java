@@ -16,17 +16,17 @@ public class Scenario {
         return codeCorrect;
     }
 
-    // Extraire le code à partir du numéro (ex. : 315 → [3, 1, 5])
+    // Extraire le code à partir du numéro (ex. : 315 -> [3, 1, 5])
     private List<Integer> extraireCode(int numeroSalle) {
         List<Integer> code = new ArrayList<>();
-        code.add(numeroSalle / 100);         // Centaine → Étape
-        code.add((numeroSalle / 10) % 10);   // Dizaines → Salle
-        code.add(numeroSalle % 10);          // Unité → Position
+        code.add(numeroSalle / 100);         // Centaine -> Étape
+        code.add((numeroSalle / 10) % 10);   // Dizaines -> Salle
+        code.add(numeroSalle % 10);          // Unité -> Position
         return code;
     }
 
     public int getEtage() {
-        return codeCorrect.getFirst();
+        return codeCorrect.get(0);
     }
 
     public int getSalle() {
