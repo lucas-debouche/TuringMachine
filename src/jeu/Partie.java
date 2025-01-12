@@ -1,8 +1,5 @@
 package jeu;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Partie {
     public String nom;
     private boolean etatPartie;

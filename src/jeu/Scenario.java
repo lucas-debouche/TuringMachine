@@ -5,16 +5,11 @@ import java.util.List;
 
 public class Scenario {
 
-    private int numeroSalle; // Le numéro du scénario (315, 432, 522)
     private List<Integer> codeCorrect; // Les chiffres du code (Étage, Salle, Position)
 
     public Scenario(int numeroSalle) {
-        this.numeroSalle = numeroSalle;
+        // Le numéro du scénario (315, 432, 522)
         this.codeCorrect = extraireCode(numeroSalle);
-    }
-
-    public int getNumeroSalle() {
-        return numeroSalle;
     }
 
     public List<Integer> getCodeCorrect() {
@@ -31,7 +26,7 @@ public class Scenario {
     }
 
     public int getEtage() {
-        return codeCorrect.get(0);
+        return codeCorrect.getFirst();
     }
 
     public int getSalle() {

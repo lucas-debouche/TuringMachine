@@ -13,9 +13,4 @@ class Proposition {
         return valeurs;
     }
 
-    public void addSymbole(int symbole) {
-        valeurs.add(symbole);
-
-    }
-
 }
