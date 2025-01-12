@@ -199,11 +199,17 @@ public class Main {
 
         // Zone pour afficher les vérificateurs
         JPanel verifierPanel = new JPanel();
-        verifierPanel.setLayout(new BoxLayout(verifierPanel, BoxLayout.Y_AXIS));
 
+        JPanel titlePanel = new JPanel(new BorderLayout());
         JLabel titleVerifier = new JLabel("Cliquez sur 3 vérificateurs pour les sélectionner :");
         titleVerifier.setFont(new Font("Roboto", Font.BOLD, 20));
-        verifierPanel.add(titleVerifier);
+        titleVerifier.setHorizontalAlignment(SwingConstants.LEFT);
+        titlePanel.add(titleVerifier, BorderLayout.WEST);
+
+
+        verifierPanel.setLayout(new BoxLayout(verifierPanel, BoxLayout.Y_AXIS));
+        verifierPanel.add(titlePanel);
+
         verifierPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         List<JPanel> verifierBoxes = new ArrayList<>();
@@ -270,7 +276,7 @@ public class Main {
 
         // Zone pour saisir le code
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new GridLayout(1, 3, 20, 0));
+        inputPanel.setLayout(new BorderLayout());
 
         JPanel trianglePanel = new JPanel();
         JPanel squarePanel = new JPanel();
@@ -284,9 +290,22 @@ public class Main {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.VERTICAL;
 
+        JLabel triangleLabel = new JLabel("🏠 : Etage");
+        JLabel squareLabel = new JLabel("🔶 : Salle");
+        JLabel circleLabel = new JLabel("🟣 : Position");
+
+        triangleLabel.setHorizontalAlignment(JLabel.CENTER);
+        squareLabel.setHorizontalAlignment(JLabel.CENTER);
+        circleLabel.setHorizontalAlignment(JLabel.CENTER);
+
         for (int i = 0; i < 3; i++) {
             JPanel currentPanel = (i == 0) ? trianglePanel : (i == 1) ? squarePanel : circlePanel;
             currentPanel.setLayout(layout);
+
+            JLabel label = (i == 0) ? triangleLabel : (i == 1) ? squareLabel : circleLabel;
+            gbc.gridx = 0;
+            gbc.gridy = 0;  // Ligne 0 pour le label
+            currentPanel.add(label, gbc);
 
             for (int j = 0; j < 6; j++) {
                 buttons[i][j] = new JButton(buttonLabels[j]);
@@ -299,7 +318,7 @@ public class Main {
                 final int col = i;
                 final int num = j;
                 gbc.gridx = 0;
-                gbc.gridy = j;
+                gbc.gridy = j + 1; // Lignes 1 à 6 pour les boutons
 
                 buttons[i][j].addActionListener(e -> {
                     for (JButton button : buttons[col]) {
@@ -311,35 +330,34 @@ public class Main {
             }
         }
 
-        JLabel triangleLabel = new JLabel("🏠 : Etage");
-        JLabel squareLabel = new JLabel("🔶 : Salle");
-        JLabel circleLabel = new JLabel("🟣 : Position");
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(1, 3, 20, 0));
+        centerPanel.add(trianglePanel);
+        centerPanel.add(squarePanel);
+        centerPanel.add(circlePanel);
 
-        trianglePanel.add(triangleLabel);
-        squarePanel.add(squareLabel);
-        circlePanel.add(circleLabel);
+        inputPanel.add(centerPanel, BorderLayout.CENTER);
 
-        inputPanel.add(trianglePanel);
-        inputPanel.add(squarePanel);
-        inputPanel.add(circlePanel);
-        frame.add(inputPanel, BorderLayout.CENTER);
 
-        // Bouton pour valider la proposition
         JPanel verifyPanel = new JPanel();
         verifyPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JButton verifyButton = new JButton("Vérifier");
         styleButton(verifyButton);
         verifyButton.setPreferredSize(new Dimension(200, 50));
         verifyPanel.add(verifyButton);
-        frame.add(verifyPanel, BorderLayout.SOUTH);
+
+        inputPanel.add(verifyPanel, BorderLayout.SOUTH);
 
         // Bouton de retour à la page d'accueil
         JPanel backPanel = new JPanel(new BorderLayout());
         JButton backButton = new JButton("⬅ Retour à la page d'accueil");
         backButton.setFocusable(false);
-        backButton.setPreferredSize(new Dimension(200, 25));
+        backButton.setPreferredSize(new Dimension(250, 40));
+        backButton.setBackground(new Color(200, 200, 200));
         backPanel.add(backButton, BorderLayout.EAST);
-        frame.add(backPanel, BorderLayout.NORTH);
+        inputPanel.add(backPanel, BorderLayout.NORTH);
+
+        frame.add(inputPanel, BorderLayout.CENTER);
 
 
         verifyButton.addActionListener(e -> {
