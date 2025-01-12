@@ -71,21 +71,21 @@ class Critere {
                 yield false;
             }
             case "🟣 + 🏠 < 6" -> {
-                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) < 10) {
+                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) < 6) {
                     critere.valide = (position + etage < 6) ? 2 : 1;
                     yield true;
                 }
                 yield false;
             }
             case "🟣 + 🏠 = 6" -> {
-                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) == 10) {
+                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) == 6) {
                     critere.valide = (position + etage == 6) ? 2 : 1;
                     yield true;
                 }
                 yield false;
             }
             case "🟣 + 🏠 > 6" -> {
-                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) > 10) {
+                if (proposition.getValeurs().get(2) + proposition.getValeurs().get(0) > 6) {
                     critere.valide = (position + etage > 6) ? 2 : 1;
                     yield true;
                 }
